@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Workplace Productivity Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .loader {
+      border: 3px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 3px solid #3b82f6;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+  <div class="flex h-screen overflow-hidden">
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col justify-between hidden md:flex shrink-0">
+      <div>
+        <div class="flex items-center gap-3 px-6 py-5 border-b border-slate-800">
+          <i class="fa-solid fa-wand-magic-sparkles text-blue-500 text-xl"></i>
+          <span class="font-bold text-lg text-white tracking-wide">TaskAI Hub</span>
+        </div>
+        <nav class="p-4 space-y-1">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium bg-blue-600 text-white transition-all">
+            <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
+          </button>
+          <button onclick="switchTab('email')" id="nav-email" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition-all">
+            <i class="fa-solid fa-paper-plane w-5"></i> Email Generator
+          </button>
+          <button onclick="switchTab('notes')" id="nav-notes" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition-all">
+            <i class="fa-solid fa-file-contract w-5"></i> Notes Summarizer
+          </button>
+          <button onclick="switchTab('planner')" id="nav-planner" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition-all">
+            <i class="fa-solid fa-list-check w-5"></i> AI Task Planner
+          </button>
+          <button onclick="switchTab('research')" id="nav-research" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition-all">
+            <i class="fa-solid fa-magnifying-glass w-5"></i> Research Assistant
+          </button>
+          <button onclick="switchTab('chatbot')" id="nav-chatbot" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium hover:bg-slate-800 hover:text-white transition-all">
+            <i class="fa-solid fa-comments w-5"></i> AI Chatbot
+          </button>
+        </nav>
+      </div>
+      <div class="p-4 border-t border-slate-800">
+        <div class="flex items-center gap-3 px-2">
+          <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white text-sm">JD</div>
+          <div>
+            <p class="text-sm font-medium text-white">Jane Doe</p>
+            <p class="text-xs text-slate-500">Pro License</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button class="md:hidden text-slate-600 focus:outline-none" onclick="toggleMobileNav()">
+            <i class="fa-solid fa-bars text-xl"></i>
+          </button>
+          <h1 id="page-title" class="text-xl font-bold text-slate-900">Dashboard</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">
+            <span class="w-2 h-2 mr-1.5 rounded-full bg-emerald-500"></span> Engine Ready
+          </span>
+        </div>
+      </header>
+
+      <main class="flex-1 overflow-y-auto p-6 bg-slate-50">
+        
+        <div id="tab-dashboard" class="tab-content active space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tasks Saved Today</p>
+              <p class="text-2xl font-bold text-slate-900 mt-2">14</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Hours Saved</p>
+              <p class="text-2xl font-bold text-blue-600 mt-2">3.5 hrs</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Emails Processed</p>
+              <p class="text-2xl font-bold text-slate-900 mt-2">28</p>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">AI Accuracy Score</p>
+              <p class="text-2xl font-bold text-emerald-600 mt-2">99.2%</p>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+            <h2 class="text-lg font-bold text-slate-900 mb-4">Quick AI Workflows</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              <button onclick="switchTab('email')" class="p-4 border border-slate-200 rounded-lg hover:border-blue-500 hover:shadow-sm text-left transition-all">
+                <i class="fa-solid fa-paper-plane text-blue-600 text-lg mb-2"></i>
+                <h3 class="font-semibold text-slate-900 text-sm">Draft Response</h3>
+                <p class="text-xs text-slate-500 mt-1">Generate polished client emails instantly.</p>
+              </button>
+              <button onclick="switchTab('notes')" class="p-4 border border-slate-200 rounded-lg hover:border-blue-500 hover:shadow-sm text-left transition-all">
+                <i class="fa-solid fa-file-contract text-blue-600 text-lg mb-2"></i>
+                <h3 class="font-semibold text-slate-900 text-sm">Summarize Transcript</h3>
+                <p class="text-xs text-slate-500 mt-1">Extract actions & deadlines from meeting notes.</p>
+              </button>
+              <button onclick="switchTab('planner')" class="p-4 border border-slate-200 rounded-lg hover:border-blue-500 hover:shadow-sm text-left transition-all">
+                <i class="fa-solid fa-list-check text-blue-600 text-lg mb-2"></i>
+                <h3 class="font-semibold text-slate-900 text-sm">Plan Daily Schedule</h3>
+                <p class="text-xs text-slate-500 mt-1">Prioritize messy task lists by impact.</p>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-email" class="tab-content space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+              <h2 class="text-base font-bold text-slate-900 border-b pb-2">Email Configuration</h2>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Target Audience</label>
+                <input type="text" id="email-audience" placeholder="e.g., Executive Client, Development Team" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Tone</label>
+                  <select id="email-tone" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <option>Professional & Persuasive</option>
+                    <option>Direct & Concise</option>
+                    <option>Warm & Friendly</option>
+                    <option>Urgent & Firm</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Goal</label>
+                  <input type="text" id="email-goal" placeholder="e.g., Project Update, Project Pitch" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Key Context / Points</label>
+                <textarea id="email-context" rows="4" placeholder="Mention project delay by 2 days, new deliverable dates, and request approval." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              </div>
+              <button onclick="generateEmail()" class="w-full bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                <span id="email-btn-text">Generate Email</span>
+                <div id="email-loader" class="loader hidden"></div>
+              </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 mb-4">Generated Output</h2>
+                <div id="email-output" class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm font-mono text-slate-700 whitespace-pre-line min-h-[220px]">
+                  Fill out the parameters and click "Generate Email" to see structured output.
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 mt-4 italic border-t pt-2"><i class="fa-solid fa-circle-info mr-1"></i> AI-generated content may require human review.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-notes" class="tab-content space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+              <h2 class="text-base font-bold text-slate-900 border-b pb-2">Unstructured Meeting Notes</h2>
+              <div>
+                <textarea id="notes-input" rows="10" placeholder="Paste raw meeting transcripts or scribbled notes here..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">Meeting: Q3 Product Strategy
+Attendees: Sarah, Mark, Dave
+Sarah highlighted that user onboarding drop-off is up 12%. Dave suggested simplifying the sign-up form.
+Mark will redesign the sign-up flow by Friday. 
+Sarah to pull analytics on the mobile app drop-off by Wednesday.
+Budget approved for external UI audit ($5,000 max).</textarea>
+              </div>
+              <button onclick="summarizeNotes()" class="w-full bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                <span id="notes-btn-text">Extract Insights</span>
+                <div id="notes-loader" class="loader hidden"></div>
+              </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 mb-4">Structured Executive Summary</h2>
+                <div id="notes-output" class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm text-slate-700 space-y-3 min-h-[260px]">
+                  Submit notes on the left to extract Key Takeaways, Action Items, and Deadlines.
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 mt-4 italic border-t pt-2"><i class="fa-solid fa-circle-info mr-1"></i> AI-generated content may require human review.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-planner" class="tab-content space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+              <h2 class="text-base font-bold text-slate-900 border-b pb-2">Unorganized Task Backlog</h2>
+              <div>
+                <textarea id="planner-input" rows="8" placeholder="List tasks along with estimated time or details..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">- Fix critical bug in payment gateway (High urgency)
+- Review Q3 marketing deck (1 hr)
+- One-on-one call with Alex (30 mins)
+- Update documentation for API (2 hrs)</textarea>
+              </div>
+              <button onclick="planTasks()" class="w-full bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                <span id="planner-btn-text">Prioritize & Schedule</span>
+                <div id="planner-loader" class="loader hidden"></div>
+              </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 mb-4">Eisenhower Matrix & Timeline</h2>
+                <div id="planner-output" class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm text-slate-700 min-h-[220px]">
+                  Provide your raw task list to build an optimal schedule.
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 mt-4 italic border-t pt-2"><i class="fa-solid fa-circle-info mr-1"></i> AI-generated content may require human review.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-research" class="tab-content space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+              <h2 class="text-base font-bold text-slate-900 border-b pb-2">Research Topic or Text</h2>
+              <div>
+                <textarea id="research-input" rows="8" placeholder="Enter a topic or paste complex material..." class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">Impact of Remote Work on Organizational Productivity and Employee Retention in SaaS companies from 2021 to 2025.</textarea>
+              </div>
+              <button onclick="analyzeResearch()" class="w-full bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+                <span id="research-btn-text">Analyze & Synthesize</span>
+                <div id="research-loader" class="loader hidden"></div>
+              </button>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <h2 class="text-base font-bold text-slate-900 border-b pb-2 mb-4">Core Insights & Analysis</h2>
+                <div id="research-output" class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-sm text-slate-700 min-h-[220px] space-y-2">
+                  Enter research source material to extract key findings and core summaries.
+                </div>
+              </div>
+              <p class="text-xs text-slate-400 mt-4 italic border-t pt-2"><i class="fa-solid fa-circle-info mr-1"></i> AI-generated content may require human review.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-chatbot" class="tab-content space-y-6">
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-[600px]">
+            <div class="p-4 border-b border-slate-200 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                <span class="font-bold text-sm text-slate-800">Assistant Chatbot Session</span>
+              </div>
+              <button onclick="clearChat()" class="text-xs text-slate-500 hover:text-slate-800">Clear Context</button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">AI</div>
+                <div class="bg-slate-100 rounded-2xl rounded-tl-none p-3 text-sm text-slate-800 max-w-[80%]">
+                  Hello Jane! How can I support your workflow today?
+                </div>
+              </div>
+            </div>
+
+            <div class="p-4 border-t border-slate-200">
+              <form onsubmit="handleChatSubmit(event)" class="flex gap-2">
+                <input type="text" id="chat-input" placeholder="Ask a workplace question..." class="flex-1 border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors flex items-center gap-1">
+                  <span>Send</span>
+                  <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+              </form>
+              <p class="text-xs text-slate-400 mt-2 text-center italic"><i class="fa-solid fa-circle-info mr-1"></i> AI-generated content may require human review.</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Navigation / Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => {
+        el.classList.remove('bg-blue-600', 'text-white');
+        el.classList.add('hover:bg-slate-800', 'hover:text-white');
+      });
+
+      document.getElementById('tab-' + tabId).classList.add('active');
+      const activeNav = document.getElementById('nav-' + tabId);
+      if (activeNav) {
+        activeNav.classList.add('bg-blue-600', 'text-white');
+        activeNav.classList.remove('hover:bg-slate-800', 'hover:text-white');
+      }
+
+      // Title mapping
+      const titles = {
+        'dashboard': 'Dashboard',
+        'email': 'Smart Email Generator',
+        'notes': 'Meeting Notes Summarizer',
+        'planner': 'AI Task Planner',
+        'research': 'AI Research Assistant',
+        'chatbot': 'AI Workplace Assistant Chatbot'
+      };
+      document.getElementById('page-title').innerText = titles[tabId] || 'Dashboard';
+    }
+
+    // Toggle Loading Helper
+    function toggleLoading(btnTextId, loaderId, isLoading, defaultText) {
+      const btnText = document.getElementById(btnTextId);
+      const loader = document.getElementById(loaderId);
+      if (isLoading) {
+        btnText.innerText = 'Processing...';
+        loader.classList.remove('hidden');
+      } else {
+        btnText.innerText = defaultText;
+        loader.classList.add('hidden');
+      }
+    }
+
+    // Feature 1: Email Generator
+    function generateEmail() {
+      const audience = document.getElementById('email-audience').value || 'Stakeholders';
+      const tone = document.getElementById('email-tone').value;
+      const goal = document.getElementById('email-goal').value || 'Status Update';
+      const context = document.getElementById('email-context').value || 'No additional details provided.';
+
+      toggleLoading('email-btn-text', 'email-loader', true, 'Generate Email');
+
+      setTimeout(() => {
+        const output = `Subject: ${goal} - Key Updates
+
+Dear ${audience},
+
+I hope this message finds you well. 
+
+I am writing to provide an update regarding our core objectives. ${context}
+
+Please let me know if you have any questions or require further adjustments before we proceed.
+
+Best regards,
+Jane Doe
+Product Operations`;
+
+        document.getElementById('email-output').innerText = output;
+        toggleLoading('email-btn-text', 'email-loader', false, 'Generate Email');
+      }, 1000);
+    }
+
+    // Feature 2: Meeting Notes Summarizer
+    function summarizeNotes() {
+      const input = document.getElementById('notes-input').value;
+      if (!input.trim()) return;
+
+      toggleLoading('notes-btn-text', 'notes-loader', true, 'Extract Insights');
+
+      setTimeout(() => {
+        const output = `
+          <div>
+            <span class="font-bold text-slate-900 border-b border-slate-200 pb-1 block mb-2">📌 Key Takeaways</span>
+            <ul class="list-disc pl-5 space-y-1 text-slate-700">
+              <li>User onboarding drop-off has increased by 12%.</li>
+              <li>Decision made to simplify the initial sign-up workflow.</li>
+              <li>Budget up to $5,000 has been greenlit for external UX review.</li>
+            </ul>
+          </div>
+          <div class="mt-4">
+            <span class="font-bold text-slate-900 border-b border-slate-200 pb-1 block mb-2">⚡ Action Items & Deadlines</span>
+            <ul class="list-disc pl-5 space-y-1 text-slate-700">
+              <li><strong>Sarah:</strong> Pull mobile app drop-off analytics <span class="text-red-600 font-semibold">(Due: Wednesday)</span></li>
+              <li><strong>Mark:</strong> Complete redesign of sign-up interface <span class="text-red-600 font-semibold">(Due: Friday)</span></li>
+            </ul>
+          </div>
+        `;
+        document.getElementById('notes-output').innerHTML = output;
+        toggleLoading('notes-btn-text', 'notes-loader', false, 'Extract Insights');
+      }, 1200);
+    }
+
+    // Feature 3: Task Planner
+    function planTasks() {
+      const input = document.getElementById('planner-input').value;
+      if (!input.trim()) return;
+
+      toggleLoading('planner-btn-text', 'planner-loader', true, 'Prioritize & Schedule');
+
+      setTimeout(() => {
+        const output = `
+          <div class="space-y-3">
+            <div class="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <span class="text-xs font-bold text-red-700 uppercase tracking-wider block">🚨 Priority 1: High Urgent / High Impact</span>
+              <p class="font-medium text-slate-800 text-sm mt-1">Fix critical bug in payment gateway</p>
+              <span class="text-xs text-slate-500">Scheduled: 09:00 AM - 10:30 AM</span>
+            </div>
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <span class="text-xs font-bold text-blue-700 uppercase tracking-wider block">📅 Priority 2: Important / Planned</span>
+              <p class="font-medium text-slate-800 text-sm mt-1">Review Q3 marketing deck & One-on-one call with Alex</p>
+              <span class="text-xs text-slate-500">Scheduled: 11:00 AM - 12:30 PM</span>
+            </div>
+            <div class="p-3 bg-slate-100 border border-slate-200 rounded-lg">
+              <span class="text-xs font-bold text-slate-600 uppercase tracking-wider block">📋 Priority 3: Low Urgency / Maintenance</span>
+              <p class="font-medium text-slate-800 text-sm mt-1">Update documentation for API</p>
+              <span class="text-xs text-slate-500">Scheduled: 02:00 PM - 04:00 PM</span>
+            </div>
+          </div>
+        `;
+        document.getElementById('planner-output').innerHTML = output;
+        toggleLoading('planner-btn-text', 'planner-loader', false, 'Prioritize & Schedule');
+      }, 1000);
+    }
+
+    // Feature 4: Research Assistant
+    function analyzeResearch() {
+      const input = document.getElementById('research-input').value;
+      if (!input.trim()) return;
+
+      toggleLoading('research-btn-text', 'research-loader', true, 'Analyze & Synthesize');
+
+      setTimeout(() => {
+        const output = `
+          <div class="space-y-3">
+            <p class="text-slate-800 font-semibold border-b pb-1">Core Findings Summary</p>
+            <p class="text-xs text-slate-600 leading-relaxed">Analysis shows structured hybrid work frameworks maintain a 22% higher employee retention rate over full in-office mandates within SaaS engineering teams.</p>
+            
+            <p class="text-slate-800 font-semibold border-b pb-1 pt-2">Key Drivers Identified</p>
+            <ul class="list-disc pl-5 text-xs text-slate-600 space-y-1">
+              <li>Flexibility directly lowers voluntary turnover.</li>
+              <li>Asynchronous documentation increases feature deployment velocity.</li>
+              <li>Management oversight shifted from hours-logged to output-based evaluation.</li>
+            </ul>
+          </div>
+        `;
+        document.getElementById('research-output').innerHTML = output;
+        toggleLoading('research-btn-text', 'research-loader', false, 'Analyze & Synthesize');
+      }, 1100);
+    }
+
+    // Feature 5: AI Chatbot
+    function handleChatSubmit(event) {
+      event.preventDefault();
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      const chatMessages = document.getElementById('chat-messages');
+
+      // User Message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'flex items-start gap-3 justify-end';
+      userMsg.innerHTML = `
+        <div class="bg-blue-600 text-white rounded-2xl rounded-tr-none p-3 text-sm max-w-[80%]">
+          ${escapeHtml(message)}
+        </div>
+        <div class="w-8 h-8 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-xs shrink-0">JD</div>
+      `;
+      chatMessages.appendChild(userMsg);
+      input.value = '';
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+
+      // Simulated Response
+      setTimeout(() => {
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'flex items-start gap-3';
+        aiMsg.innerHTML = `
+          <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">AI</div>
+          <div class="bg-slate-100 rounded-2xl rounded-tl-none p-3 text-sm text-slate-800 max-w-[80%]">
+            I've processed your query about "${escapeHtml(message)}". I can assist you by creating a task directly or generating an outline for your team. What would you prefer?
+          </div>
+        `;
+        chatMessages.appendChild(aiMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 800);
+    }
+
+    function clearChat() {
+      document.getElementById('chat-messages').innerHTML = `
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs shrink-0">AI</div>
+          <div class="bg-slate-100 rounded-2xl rounded-tl-none p-3 text-sm text-slate-800 max-w-[80%]">
+            Hello Jane! How can I support your workflow today?
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  </script>
+</body>
+</html>
